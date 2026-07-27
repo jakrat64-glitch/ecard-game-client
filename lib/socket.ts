@@ -7,13 +7,19 @@ function resolveSocketUrl(): string {
     return configuredUrl.trim();
   }
 
-  // Railway serves public domains over 443 only — never name an explicit
-  // port here, or the browser will dial a port the edge does not listen on.
-  if (typeof window !== "undefined" && window.location.hostname.includes("railway.app")) {
-    return "https://ecard-game-server-production.up.railway.app";
+  // The server is hosted on Render; the client may be served from Railway or
+  // anywhere else. Any non-local host falls back to the deployed server rather
+  // than to localhost, which is never reachable from a visitor's browser.
+  // Never name an explicit port — these hosts serve over 443 only.
+  if (typeof window !== "undefined" && !isLocalHost(window.location.hostname)) {
+    return "https://ecard-game-server.onrender.com";
   }
 
   return "http://localhost:4000";
+}
+
+function isLocalHost(hostname: string): boolean {
+  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
 }
 
 const SOCKET_URL = resolveSocketUrl();
