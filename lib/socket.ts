@@ -7,8 +7,10 @@ function resolveSocketUrl(): string {
     return configuredUrl.trim();
   }
 
+  // Railway serves public domains over 443 only — never name an explicit
+  // port here, or the browser will dial a port the edge does not listen on.
   if (typeof window !== "undefined" && window.location.hostname.includes("railway.app")) {
-    return "https://ecard-game-server-production.up.railway.app:8000";
+    return "https://ecard-game-server-production.up.railway.app";
   }
 
   return "http://localhost:4000";
