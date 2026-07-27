@@ -3,7 +3,9 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [build.args]
-NEXT_PUBLIC_SOCKET_URL = "https://ecard-game-server-production.up.railway.app"
+# NEXT_PUBLIC_* values are inlined at build time, so this must name the host
+# that actually serves Socket.io — the server moved to Render.
+NEXT_PUBLIC_SOCKET_URL = "https://ecard-game-server.onrender.com"
 
 [deploy]
 restartPolicyType = "ON_FAILURE"
