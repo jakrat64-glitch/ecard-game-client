@@ -1,6 +1,20 @@
 import { io, Socket } from "socket.io-client";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
+function resolveSocketUrl(): string {
+  const configuredUrl = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_SERVER_URL;
+
+  if (configuredUrl && configuredUrl.trim()) {
+    return configuredUrl.trim();
+  }
+
+  if (typeof window !== "undefined" && window.location.hostname.includes("railway.app")) {
+    return "https://ecard-game-server-production.up.railway.app:8000";
+  }
+
+  return "http://localhost:4000";
+}
+
+const SOCKET_URL = resolveSocketUrl();
 
 let socketInstance: Socket | null = null;
 
